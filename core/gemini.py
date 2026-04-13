@@ -1,4 +1,5 @@
 from google import genai
+
 class Prompt:
     def __init__(self):
         self.client = genai.Client()
@@ -12,10 +13,14 @@ class Prompt:
 - 複数の条項が関連する場合は、それぞれについて説明してください"""
 
     def create_prompt(self, chunks: list, question: str) -> str:
-         join_chunks="\n".join(chunks)
-         prompt="\n\n\n".join([self.system,join_chunks,question])
-         return prompt
-         # build the prompt string here
+        join_chunks = "\n".join(chunks)
+        prompt = "\n\n\n".join([self.system, join_chunks, question])
+        return prompt
 
     def response(self, chunks: list, question: str) -> str:
-        pass  # call Gemini and return answer
+        prompt = self.create_prompt(chunks, question)
+        response = self.client.models.generate_content(
+            model="gemini-3.0-flash-preview",
+            contents=prompt,
+        )
+        return response.text
