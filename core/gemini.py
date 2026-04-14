@@ -1,8 +1,13 @@
-from google import genai
+import os
 
+from google import genai
+from dotenv import load_dotenv
+from google.genai import types
 class Prompt:
     def __init__(self):
-        self.client = genai.Client()
+        load_dotenv()
+        GEMINI_API_KEY= os.getenv("GEMINI_API_KEY")
+        self.client = genai.Client(api_key=GEMINI_API_KEY)
         self.system = """あなたは日本の金融・規制法を専門とする法律文書アシスタントです。
 提供された法律文書のコンテキストのみに基づいて質問に答えてください。
 回答する際は:
@@ -20,7 +25,11 @@ class Prompt:
     def response(self, chunks: list, question: str) -> str:
         prompt = self.create_prompt(chunks, question)
         response = self.client.models.generate_content(
-            model="gemini-3.0-flash-preview",
+            model="gemini-3.1-flash-lite-preview",
             contents=prompt,
+            config = types.GenerateContentConfig(
+                temperature=0.1,
+                max_output_tokens=1024,
+            )
         )
         return response.text
