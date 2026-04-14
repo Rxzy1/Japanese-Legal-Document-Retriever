@@ -2,7 +2,7 @@ import chromadb
 class store_vector:
     def __init__(self):
         self.client = chromadb.PersistentClient(path=r"C:\Project\Vectors")
-        self.collection = self.client.get_or_create_collection("法律の種類")
+        self.collection = self.client.get_or_create_collection("legal_documents")
     def store(self,chunk_text:str,embedding:list,doc_id:str):
         self.collection.add(
             ids=[doc_id],
