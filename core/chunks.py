@@ -1,6 +1,6 @@
 class Chunks:
     def __init__(self,max_size):
-        self.max_size = 200
+        self.max_size = max_size
         self.chunk=[]
     def create_chunks(self,text:list) -> list:
         temp = []
